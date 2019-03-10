@@ -16,38 +16,46 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// 0 sem is shared between threads of the process
+// 1 sem is shared between processes
 #define SHARED 1
 
-void *Producer (void *); // the two threads
-void *Consumer (void *);
+void* Producer (void *); // the two threads
+void* Consumer (void *);
 
+int numIters;
+int bufferSize;
 sem_t empty, full;       //global semaphores
 int data;                // shared buffer, size = 1
-int numIters;
 
 // main() -- read command line and create threads
-int main(int argc, char *argv[]) {
-    pthread_t pid, cid;
+int main(int argc, char* argv[]) {
 
-    sem_init(&empty, SHARED, 1);    // sem empty = 1
-    sem_init(&full, SHARED, 0); //sem full = 0
-
-    if (argc < 2) {
-	    printf("Usage: boundedBuffer <Number of Iterations>\n");
+    // check to see if user gave appropriate arguments
+    if (argc < 3) { // 3 instead of 2
+	    printf("Usage: boundedBuffer <Number of Iterations> <buffer size>\n");
 	    exit(0);
     }
-    numIters = atoi(argv[1]);
+    numIters = atoi(argv[1]); // iterations
+    bufferSize = atoi(argv[2]); // getting buffer size from cmd line param
 
-    pthread_create(&pid, NULL, Producer, NULL);
-    pthread_create(&cid, NULL, Consumer, NULL);
+    pthread_t pid, cid;
 
-    pthread_join(pid, NULL);
-    pthread_join(cid, NULL);
+    sem_init(&empty, SHARED, bufferSize);    // sem empty = size of buffer
+    sem_init(&full, SHARED, 0);     // sem full = 0
+
+    // make 3 producers and 3 consumers
+    for (int i = 0; i < 3; i++) {
+        pthread_create(&pid, NULL, Producer, NULL);
+        pthread_create(&cid, NULL, Consumer, NULL);
+        pthread_join(pid, NULL);
+        pthread_join(cid, NULL);
+    }
     pthread_exit(0);
 }
 
 // deposit 1, ..., numIters into the data buffer
-void *Producer(void *arg) {
+void* Producer(void* arg) {
     int produced;
 
     for (produced = 0; produced < numIters; produced++) {
@@ -58,7 +66,7 @@ void *Producer(void *arg) {
 }
 
 //fetch numIters items from the buffer and sum them
-void *Consumer(void *arg) {
+void* Consumer(void* arg) {
     int total = 0;
     int consumed;
 
