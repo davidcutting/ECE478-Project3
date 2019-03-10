@@ -41,7 +41,7 @@
 
  // 0 sem is shared between threads of the process
  // 1 sem is shared between processes
- #define SHARED 0
+ #define SHARED 1
 
 void* Professor(void* arg);
 void* Student(void* arg);
@@ -52,7 +52,7 @@ void QuestionDone();
 
 int numStudents;
 int student;
-sem_t p_speak s_speak, question, answer;
+sem_t speak, question, answer;
 
 int main(int argc, char* argv[]) {
 
@@ -65,8 +65,7 @@ int main(int argc, char* argv[]) {
 
     pthread_t prof_id, stud_id;
 
-    sem_init(&p_speak, SHARED, 0);
-    sem_init(&s_speak, SHARED, 1);
+    sem_init(&speak, SHARED, 1);
     sem_init(&question, SHARED, 1);
     sem_init(&answer, SHARED, 1);
 
@@ -100,7 +99,7 @@ void* Student(void* arg) {
 void AnswerStart() {
     std::cout << "The professor wants to be asked a question." << std::endl;
     sem_wait(&question); // wait for a question
-    sem_wait(&p_speak); // wait to speak
+    sem_wait(&speak); // wait to speak
 }
 
 void AnswerDone() {
