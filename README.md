@@ -6,7 +6,7 @@
 
 First *make* the project, then run the command from the command line using this template:
 
-`./boundedBuffer <number of iterations> <size of buffer>`
+`boundedBuffer <number of iterations> <size of buffer>`
 
 ### Implementation
 
@@ -54,3 +54,21 @@ the total is 50838559
 ```
 
 ## The one-lane bridge problem
+
+### How to run
+
+First *make* the project, then run the command from the command line using this template:
+
+`condvar1`
+
+## The professor and students problem
+
+### How to run
+
+First *make* the project, then run the command from the command line using this template:
+
+`professorStudent <number of students>`
+
+### Implementation
+
+### Sample outputs
