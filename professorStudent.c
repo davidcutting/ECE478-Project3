@@ -66,15 +66,14 @@ int main(int argc, char* argv[]) {
     pthread_t prof_id, stud_id;
 
     sem_init(&speak, SHARED, 1);
-    sem_init(&question, SHARED, 1);
-    sem_init(&answer, SHARED, 1);
+    sem_init(&question, SHARED, 0);
+    sem_init(&answer, SHARED, 0);
 
+    pthread_create(&prof_id, NULL, Professor, NULL);
     for (student = 0; student < numStudents; student++) {
         pthread_create(&stud_id, NULL, Student, NULL);
         pthread_join(stud_id, NULL);
     }
-
-    pthread_create(&prof_id, NULL, Professor, NULL);
     pthread_join(prof_id, NULL);
     pthread_exit(0);
 }
@@ -89,7 +88,7 @@ void* Professor(void* arg) {
 
 void* Student(void* arg) {
     int studentNum = student;
-    std::cout << studentNum << " : The student is ready to ask a question." << std::endl;
+    std::cout << student << " : The student is ready to ask a question." << std::endl;
     QuestionStart();
     std::cout << studentNum << " : The student is asking a question." << std::endl;
     QuestionDone();
