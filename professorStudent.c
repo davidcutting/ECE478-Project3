@@ -99,21 +99,17 @@ void* Student(void* arg) {
 void AnswerStart() {
     std::cout << "The professor wants to be asked a question." << std::endl;
     sem_wait(&question); // wait for a question
-    sem_wait(&speak); // wait to speak
 }
 
 void AnswerDone() {
     std::cout << "The professor is finished answering." << std::endl;
     sem_post(&answer); // post an answer
-    sem_post(&speak); // let others speak
 }
 void QuestionStart() {
     sem_wait(&speak); // wait to speak
     sem_post(&question); // post a question
-    sem_post(&speak); // let others speak
 }
 void QuestionDone() {
     sem_wait(&answer); // wait for an answer
-    sem_wait(&speak);
     sem_post(&speak); // let others speak
 }
