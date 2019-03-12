@@ -73,7 +73,7 @@ First *make* the project, then run the command from the command line using this 
 
 The challenge of this problem is to only allow one person to speak at a time, and have the professor answer each question. Each student must wait for their turn to ask the professor a question. We achieved this with the use of semaphores.
 
-Each time either a professor or student thread speaks, the other threads must wait to be signaled before executing. We used a semaphore called *speak* for this. At the end of their execution they signal, and the next thread is allowed to speak.
+Each time a student thread speaks, the other threads must wait to be signaled before executing. We used a semaphore called *speak* for this. At the end of their execution they signal, and the next thread is allowed to speak.
 
 Another semaphore called *question* is used to control the professor thread. A professor may not answer a question before a question is asked, therefore it waits for a question and then it executes. The student starts a question by signaling the *question* semaphore, which prompts the professor to answer.
 

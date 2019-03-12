@@ -1,15 +1,13 @@
 /*
  * boundedBuffer.c
  *
+ * Problem Description:
  * A complete example of simple producer/consumer program. The Producer
- * and Consumer functions are executed as independent threads.  They
- * share access to a single buffer, data.  The producer deposits a sequence
+ * and Consumer functions are executed as independent threads. They
+ * share access to a single buffer, data. The producer deposits a sequence
  * of integers from 1 to numIters into the buffer.  The Consumer fetches
  * these values and adds them.  Two semaphores,empty and full are used to
  * ensure that the producer and consumer alternate access to the buffer.
- *
- * SOURCE: adapted from example code in "Multithreaded, Parallel, and
- *         Distributed Programming" by Gregory R. Andrews.
  */
 #include <pthread.h>
 #include <semaphore.h>
