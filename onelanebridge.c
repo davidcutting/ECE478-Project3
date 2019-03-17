@@ -8,7 +8,6 @@
 pthread_t t[NUMTHRDS];
 int car[NUMTHRDS];
 
-int coin_flip = 23;
 int j=-1;
 int a=-1,b=-1,c=-1;
 int i;
@@ -24,7 +23,6 @@ bool isSafe(int dir){
     if (currentNumber == 0)
             return true;    // always safe when bridge is empty
     else if ((currentNumber < 3) && (bridgeDirec == dir)){
-        //printf("//////////////////// %d\n",dir);
         return true;    // room for us to follow others in direc
     }
     else
@@ -34,7 +32,6 @@ bool isSafe(int dir){
 void arriveBridge()
 {
     pthread_mutex_lock(&mlock);
-    //printf("arriveBridge\n");
     p++;
     if(car[p]==0){
         printf("car %d dir 0 arrived at the bridge.\n",p+1);
@@ -46,7 +43,6 @@ void arriveBridge()
         n++;
         d=1;
     }
-    //printf("There are %d cars from the South and %d from the North\n",s,n);
     pthread_mutex_unlock(&mlock);
 }
 
@@ -59,7 +55,6 @@ void crossBridge()
     }
     pthread_mutex_lock(&mlock);
 
-    //printf("crossBridge\n");
     currentNumber++;
 
     if(car[b]==0){
@@ -70,8 +65,6 @@ void crossBridge()
     printf("car %d dir 1 crossing the bridge. Current dir: %d #cars: %d\n",b+1,bridgeDirec,currentNumber);
     bridgeDirec=1;
     }
-    //printf("    There is currently %d car(s) on the bridge",currentNumber);
-    //printf("    The current direction is %d\n",bridgeDirec);
 
     pthread_mutex_unlock(&mlock);
 }
@@ -91,7 +84,6 @@ void exitBridge()
     n--;
     }
     success++;
-    //printf("----------------------%d Successful crosses\n",success);
     pthread_mutex_unlock(&mlock);
 }
 
