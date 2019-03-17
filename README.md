@@ -59,6 +59,8 @@ the total is 50838559
 
 First *make* the project, then run the command from the command line:
 
+`onelanebridge`
+
 ### Implementation
 
 We implemented the one-lane bridge problem using mutexes and condition variables. We wrote 3 functions arrival void arriveBridge(), void crossBridge(), and void exitBridge() each with a mutex lock and unlock in the beginning and end of the funcction to ensure one thread at a time is accessing shared data. First a car direction array acquires 50 random values which are either 0 or 1. In main the oneVehicle thread is created 50 times. Then...
