@@ -59,9 +59,11 @@ the total is 50838559
 
 First *make* the project, then run the command from the command line:
 
+`onelanebridge`
+
 ### Implementation
 
-We implemented the one-lane bridge problem using mutexes and condition variables. We wrote 3 functions arrival void arriveBridge(), void crossBridge(), and void exitBridge() each with a mutex lock and unlock in the beginning and end of the funcction to ensure one thread at a time is accessing shared data. First a car direction array acquires 50 random values which are either 0 or 1. In main the oneVehicle thread is created 50 times. Then...
+We implemented the one-lane bridge problem using mutexes and condition variables. We wrote 3 functions arrival void arriveBridge(), void crossBridge(), and void exitBridge() each with a mutex lock and unlock in the beginning and end of the function to ensure one thread at a time is accessing shared data. First a car direction array acquires 50 random values which are either 0 or 1. In main the oneVehicle thread is created 50 times. Then...
 
 arriveBridge() is done by acquiring the mutex lock then based on what value is containted in the car array value either 0 or 1, will determine the direction it is from. Mutex is now unlocked.
 
@@ -84,7 +86,38 @@ car 47 dir 1 exits the bridge.
 ### Sample output
 
 ```bash
-car 11 dir 0 arrived at the bridge.
+$ ./onelanebridge
+car 1 dir 1 arrived at the bridge.
+car 1 dir 1 crossing the bridge. Current dir: 0 #cars: 1
+car 1 dir 0 exits the bridge.
+car 2 dir 1 arrived at the bridge.
+car 2 dir 1 crossing the bridge. Current dir: 1 #cars: 1
+car 2 dir 0 exits the bridge.
+car 3 dir 0 arrived at the bridge.
+car 3 dir 0 crossing the bridge. Current dir: 1 #cars: 1
+car 3 dir 0 exits the bridge.
+car 4 dir 1 arrived at the bridge.
+car 4 dir 1 crossing the bridge. Current dir: 0 #cars: 1
+car 4 dir 0 exits the bridge.
+car 5 dir 0 arrived at the bridge.
+car 5 dir 0 crossing the bridge. Current dir: 1 #cars: 1
+car 5 dir 0 exits the bridge.
+car 6 dir 0 arrived at the bridge.
+car 6 dir 0 crossing the bridge. Current dir: 0 #cars: 1
+car 6 dir 0 exits the bridge.
+car 7 dir 0 arrived at the bridge.
+car 7 dir 0 crossing the bridge. Current dir: 0 #cars: 1
+car 7 dir 0 exits the bridge.
+car 8 dir 1 arrived at the bridge.
+car 8 dir 1 crossing the bridge. Current dir: 0 #cars: 1
+car 8 dir 0 exits the bridge.
+car 9 dir 0 arrived at the bridge.
+car 9 dir 0 crossing the bridge. Current dir: 1 #cars: 1
+car 9 dir 0 exits the bridge.
+car 10 dir 0 arrived at the bridge.
+car 10 dir 0 crossing the bridge. Current dir: 0 #cars: 1
+car 10 dir 0 exits the bridge.
+car 11 dir 1 arrived at the bridge.
 car 12 dir 1 arrived at the bridge.
 car 13 dir 1 arrived at the bridge.
 car 12 dir 1 crossing the bridge. Current dir: 1 #cars: 1
@@ -103,7 +136,9 @@ First *make* the project, then run the command from the command line using this 
 
 ### Implementation
 
-This was implemented by using semaphors for synchronization and having 4 procedures QuestionStart(), QuestionDone(), AnswerStart(), and AnswerDone(). Two seperate threads are created, the professor thread and student thread. 
+This was implemented by using semaphores for synchronization. We made four procedures: QuestionStart(), QuestionDone(), AnswerStart(), and AnswerDone(). One thread is made for the professor, and any number of threads is made for the students.
+
+The challenge of this problem is to only allow one person to speak at a time, and have the professor answer each question. Each student must wait for their turn to ask the professor a question. We achieved this with the use of semaphores.
 
 Students will display that they are ready to ask a question, once the professor is ready to answer a question one student begins asking a question. No other student will ask a question until the professor finishes with an answer and that student has recieved the answer. 
 
