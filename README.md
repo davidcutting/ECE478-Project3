@@ -63,7 +63,7 @@ First *make* the project, then run the command from the command line:
 
 ### Implementation
 
-We implemented the one-lane bridge problem using mutexes and condition variables. We wrote 3 functions arrival void arriveBridge(), void crossBridge(), and void exitBridge() each with a mutex lock and unlock in the beginning and end of the funcction to ensure one thread at a time is accessing shared data. First a car direction array acquires 50 random values which are either 0 or 1. In main the oneVehicle thread is created 50 times. Then...
+We implemented the one-lane bridge problem using mutexes and condition variables. We wrote 3 functions arrival void arriveBridge(), void crossBridge(), and void exitBridge() each with a mutex lock and unlock in the beginning and end of the function to ensure one thread at a time is accessing shared data. First a car direction array acquires 50 random values which are either 0 or 1. In main the oneVehicle thread is created 50 times. Then...
 
 arriveBridge() is done by acquiring the mutex lock then based on what value is containted in the car array value either 0 or 1, will determine the direction it is from. Mutex is now unlocked.
 
@@ -86,7 +86,7 @@ car 47 dir 1 exits the bridge.
 ### Sample output
 
 ```bash
-$ ./onelanebridge 
+$ ./onelanebridge
 car 1 dir 1 arrived at the bridge.
 car 1 dir 1 crossing the bridge. Current dir: 0 #cars: 1
 car 1 dir 0 exits the bridge.
@@ -249,7 +249,8 @@ First *make* the project, then run the command from the command line using this 
 
 ### Implementation
 
-This was implemented by using semaphors for synchronization and having 4 procedures QuestionStart(), QuestionDone(), AnswerStart(), and AnswerDone(). Two seperate threads are created, the professor thread and student thread. If a question is being asked
+This was implemented by using semaphores for synchronization. We made four procedures: QuestionStart(), QuestionDone(), AnswerStart(), and AnswerDone(). One thread is made for the professor, and any number of threads is made for the students.
+
 The challenge of this problem is to only allow one person to speak at a time, and have the professor answer each question. Each student must wait for their turn to ask the professor a question. We achieved this with the use of semaphores.
 
 Each time a student thread speaks, the other threads must wait to be signaled before executing. We used a semaphore called *speak* for this. At the end of their execution they signal, and the next thread is allowed to speak.
