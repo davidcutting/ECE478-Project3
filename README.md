@@ -57,11 +57,31 @@ the total is 50838559
 
 ### How to run
 
-First *make* the project, then run the command from the command line using this template:
+First *make* the project, then run the command from the command line:
 
-`condvar1`
+### Implementation
 
-### Sample outputs
+We implemented the one-lane bridge problem using mutexes and condition variables. We wrote 3 functions arrival void arriveBridge(), void crossBridge(), and void exitBridge() each with a mutex lock and unlock in the beginning and end of the funcction to ensure one thread at a time is accessing shared data. First a car direction array acquires 50 random values which are either 0 or 1. In main the oneVehicle thread is created 50 times. Then...
+
+arriveBridge() is done by acquiring the mutex lock then based on what value is containted in the car array value either 0 or 1, will determine the direction it is from. Mutex is now unlocked.
+
+```C
+car 47 dir 1 arrived at the bridge.
+```
+
+crossBridge() is done by checking if the bridge is safe by using a isSafe bool function to check. If it is unsafe the thread will wait until it is. Once the bridge is safe the mutex lock is acquired. The number of cars on the bridge is incremented and information about the car number, direction, and number of cars is printed to the screen. Lastly the mutex is unlocked again.
+
+```C
+car 47 dir 1 crossing the bridge. Current dir: 1 #cars: 3
+```
+
+exitBridge() is done by first acquiring the mutex lock then decrementing the number of cars on the bridge by one. Now some text about the car number that exited the bridge and its direction. Finally the mutex lock unlocks once again.
+
+```C
+car 47 dir 1 exits the bridge.
+```
+
+### Sample output
 
 ```bash
 car 11 dir 0 arrived at the bridge.
@@ -70,7 +90,7 @@ car 13 dir 1 arrived at the bridge.
 car 12 dir 1 crossing the bridge. Current dir: 1 #cars: 1
 car 14 dir 0 arrived at the bridge.
 car 13 dir 1 crossing the bridge. Current dir: 1 #cars: 2
-car 10 dir 0 exits the bridge.
+car 12 dir 0 exits the bridge.
 ```
 
 ## The professor and students problem
@@ -82,5 +102,7 @@ First *make* the project, then run the command from the command line using this 
 `professorStudent <number of students>`
 
 ### Implementation
+
+This was implemented by using semaphors for synchronization and having 4 procedures QuestionStart(), QuestionDone(), AnswerStart(), and AnswerDone(). Two seperate threads are created, the professor thread and student thread. If a question is being asked
 
 ### Sample outputs
