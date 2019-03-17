@@ -138,12 +138,6 @@ First *make* the project, then run the command from the command line using this 
 
 This was implemented by using semaphores for synchronization. We made four procedures: QuestionStart(), QuestionDone(), AnswerStart(), and AnswerDone(). One thread is made for the professor, and any number of threads is made for the students.
 
-The challenge of this problem is to only allow one person to speak at a time, and have the professor answer each question. Each student must wait for their turn to ask the professor a question. We achieved this with the use of semaphores.
-
-Students will display that they are ready to ask a question, once the professor is ready to answer a question one student begins asking a question. No other student will ask a question until the professor finishes with an answer and that student has recieved the answer. 
-
-This program is designed to keep students from asking questions at the same time using semaphors to signal whether the thread must wait for another student thread or the professor to complete until it is allowed to carry on.
-
 The number of students can be changed via the command line prompt and the student threads are created by the following for loop below while there is only one professor thread in this problem.
 
 ```C
@@ -152,4 +146,46 @@ for (student = 0; student < numStudents; student++) {
         pthread_join(stud_id, NULL);
 ```
 
+The challenge of this problem is to only allow one person to speak at a time, and have the professor answer each question. Each student must wait for their turn to ask the professor a question. We achieved this with the use of semaphores.
+
+Students will display that they are ready to ask a question, once the professor is ready to answer a question one student begins asking a question. No other student will ask a question until the professor finishes with an answer and that student has recieved the answer. 
+
+This program is designed to keep students from asking questions at the same time using semaphors to signal whether the thread must wait for another student thread or the professor to complete until it is allowed to carry on.
+
 ### Sample outputs
+
+```bash
+$ ./professorStudent 5
+The professor wants to be asked a question.
+0 : The student is ready to ask a question.
+
+0 : The student is asking a question.
+The professor is answering the question.
+The professor is finished answering.
+The professor wants to be asked a question.
+0 : The student is done asking a question.
+1 : The student is ready to ask a question.
+1 : The student is asking a question.
+The professor is answering the question.
+The professor is finished answering.
+The professor wants to be asked a question.
+1 : The student is done asking a question.
+2 : The student is ready to ask a question.
+The professor is answering the question.
+The professor is finished answering.
+The professor wants to be asked a question.
+2 : The student is asking a question.
+2 : The student is done asking a question.
+3 : The student is ready to ask a question.
+3 : The student is asking a question.
+The professor is answering the question.
+The professor is finished answering.
+The professor wants to be asked a question.
+3 : The student is done asking a question.
+4 : The student is ready to ask a question.
+4 : The student is asking a question.
+The professor is answering the question.
+The professor is finished answering.
+The professor wants to be asked a question.
+4 : The student is done asking a question.
+```
