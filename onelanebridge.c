@@ -1,89 +1,118 @@
-#include <pthread.h>
-#include <semaphore.h>
 #include <stdio.h>
+#include <pthread.h>
 #include <stdlib.h>
-#include <iostream>
-#include <ctime>
-#include <cstdlib>
+#include <time.h>
 
+#define NUMTHRDS 50
 
-//One Lane Bridge Monitor Solution
+pthread_t t[NUMTHRDS];
+int car[NUMTHRDS];
 
-int thread_ids[50];
-pthread_mutex_t count_mutex;
-pthread_cond_t count_threshold_cv;
+int coin_flip = 23;
+int j=-1;
+int a=-1;
+int i;
+int n=0,s=0;
+int p=0;
+int currentNumber=0, bridgeDirec, d;
 
-//monitor Bridge {
-    //Condition safe;
-    
-    int currentDirec;
-    int currentNumber;
+int success=0;
 
-    //don't lock here or else you'll get deadlock
-    bool isSafe(int carID) {
-        if ( currentNumber == 0 )
+pthread_mutex_t mlock;
+
+bool isSafe(int dir){
+    if (currentNumber == 0)
             return true;    // always safe when bridge is empty
-        else if ((currentNumber < 3) && (currentDirec == carID))
-            return true;    // room for us to follow others in direc
-        else
-            return false;   // bridge is full or has oncoming traffic.
+    else if ((currentNumber < 3) && (bridgeDirec == dir)){
+        //printf("//////////////////// %d\n",dir);
+        return true;    // room for us to follow others in direc
     }
-    void ArriveBridge(int carID) {
-        printf("A car in direction %d has arrived at the bridge\n",carID);
-        pthread_mutex_lock(&count_mutex);
-        while (!isSafe(carID) )
-            pthread_cond_wait(&count_threshold_cv, &count_mutex);
-        currentNumber++;
-        currentDirec = carID;
-        printf("current number %d current direction %d\n", currentNumber, currentDirec);
-        pthread_mutex_unlock(&count_mutex);
-    }
-    void CrossBridge (int carID) {
-        pthread_mutex_lock(&count_mutex);
-        printf("A car is crossing the bridge with direction %d\n", carID);
-        pthread_mutex_unlock(&count_mutex);
-    }
-    void ExitBridge(int carID) {
-        pthread_mutex_lock(&count_mutex);
-        currentNumber--;
-        printf("A car is exiting the bridge from direction %d\n\n", carID);
-        //safe.Signal();
-        pthread_mutex_unlock(&count_mutex);
-    }
-
-    
-//}
-void OneVehicle(int carID) {
-    ArriveBridge(carID);
-    CrossBridge(carID);
-    ExitBridge(carID);
+    else
+        return false;   // bridge is full or has oncoming traffic.
 }
+
+void arriveBridge()
+{
+    pthread_mutex_lock(&mlock);
+    //printf("arriveBridge\n");
+    a++;
+    if(car[a]==0){
+        printf("car %d dir 0 arrived at the bridge.\n",p+1);
+        s++;
+        d=0;
+    }
+    else{
+        printf("car %d dir 1 arrived at the bridge.\n",p+1);
+        n++;
+        d=1;
+    }
+    //printf("There are %d cars from the South and %d from the North\n",s,n);
+    pthread_mutex_unlock(&mlock);
+}
+
+void crossBridge()
+{
+    while(isSafe(d)==false){
+        int x=0;
+        x=1;
+    }
+    pthread_mutex_lock(&mlock);
+
+    //printf("crossBridge\n");
+    currentNumber++;
+
+    if(car[p]==0){
+    printf("car %d dir 0 crossing the bridge. Current dir: %d #cars: %d\n",p+1,bridgeDirec,currentNumber);
+    bridgeDirec=0;
+    }
+    else{
+    printf("car %d dir 1 crossing the bridge. Current dir: %d #cars: %d\n",p+1,bridgeDirec,currentNumber);
+    bridgeDirec=1;
+    }
+    //printf("    There is currently %d car(s) on the bridge",currentNumber);
+    //printf("    The current direction is %d\n",bridgeDirec);
+
+    pthread_mutex_unlock(&mlock);
+}
+
+void exitBridge()
+{
+    pthread_mutex_lock(&mlock);
+    //printf("exitBridge\n");
+    currentNumber--;
+    if(car[p]==0){
+    printf("car %d dir 0 exits the bridge.\n",p+1);
+    s--;
+    }
+    else{
+    printf("car %d dir 0 exits the bridge.\n",p+1);
+    n--;
+    }
+    p++;
+    success++;
+    //printf("----------------------%d Successful crosses\n",success);
+    pthread_mutex_unlock(&mlock);
+}
+
+static void *thread1(void *_){
+    arriveBridge();
+    crossBridge();
+    exitBridge();
+    return 0;
+}
+
 
 int main()
 {
-    pthread_t threads[50];
-    pthread_attr_t attr;
-
-    pthread_mutex_init(&count_mutex, NULL);
-    pthread_cond_init (&count_threshold_cv, NULL);
-    
-    pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-    for(int i=0; i<50; i++)
-        pthread_create(&threads[i], &attr, <#void * _Nullable (* _Nonnull)(void * _Nullable)#>, (void *)&thread_ids[i]);
-
     srand(time(NULL));
-    for(int i=0; i<50; i++)
-        thread_ids[i] = rand() % 2;
-    for(int i=0; i<50; i++){
-        OneVehicle(thread_ids[i]);
-        
-        for (i = 0; i < 50; i++) {
-            pthread_join(threads[i], NULL);
-        }
-        pthread_attr_destroy(&attr);
-        pthread_mutex_destroy(&count_mutex);
-        pthread_cond_destroy(&count_threshold_cv);
-        pthread_exit (NULL);
+    pthread_mutex_init(&mlock,NULL);
+
+    for(i=0; i<NUMTHRDS; i++){
+        car[i] = rand() % 2;
+        pthread_create(&t[i], NULL, thread1, NULL);
     }
+    pthread_mutex_destroy(&mlock);
+
+    pthread_exit(NULL);
+    return 0;
 }
