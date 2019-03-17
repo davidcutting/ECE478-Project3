@@ -8,11 +8,12 @@
 pthread_t t[NUMTHRDS];
 int car[NUMTHRDS];
 
+int coin_flip = 23;
 int j=-1;
-int a=-1;
+int a=-1,b=-1,c=-1;
 int i;
 int n=0,s=0;
-int p=0;
+int p=-1;
 int currentNumber=0, bridgeDirec, d;
 
 int success=0;
@@ -34,8 +35,8 @@ void arriveBridge()
 {
     pthread_mutex_lock(&mlock);
     //printf("arriveBridge\n");
-    a++;
-    if(car[a]==0){
+    p++;
+    if(car[p]==0){
         printf("car %d dir 0 arrived at the bridge.\n",p+1);
         s++;
         d=0;
@@ -51,8 +52,9 @@ void arriveBridge()
 
 void crossBridge()
 {
+    b++;
     while(isSafe(d)==false){
-        int x=0;
+        int x=0; //do work
         x=1;
     }
     pthread_mutex_lock(&mlock);
@@ -60,12 +62,12 @@ void crossBridge()
     //printf("crossBridge\n");
     currentNumber++;
 
-    if(car[p]==0){
-    printf("car %d dir 0 crossing the bridge. Current dir: %d #cars: %d\n",p+1,bridgeDirec,currentNumber);
+    if(car[b]==0){
+    printf("car %d dir 0 crossing the bridge. Current dir: %d #cars: %d\n",b+1,bridgeDirec,currentNumber);
     bridgeDirec=0;
     }
     else{
-    printf("car %d dir 1 crossing the bridge. Current dir: %d #cars: %d\n",p+1,bridgeDirec,currentNumber);
+    printf("car %d dir 1 crossing the bridge. Current dir: %d #cars: %d\n",b+1,bridgeDirec,currentNumber);
     bridgeDirec=1;
     }
     //printf("    There is currently %d car(s) on the bridge",currentNumber);
@@ -79,15 +81,15 @@ void exitBridge()
     pthread_mutex_lock(&mlock);
     //printf("exitBridge\n");
     currentNumber--;
-    if(car[p]==0){
-    printf("car %d dir 0 exits the bridge.\n",p+1);
+    c++;
+    if(car[c]==0){
+    printf("car %d dir 0 exits the bridge.\n",c+1);
     s--;
     }
     else{
-    printf("car %d dir 0 exits the bridge.\n",p+1);
+    printf("car %d dir 0 exits the bridge.\n",c+1);
     n--;
     }
-    p++;
     success++;
     //printf("----------------------%d Successful crosses\n",success);
     pthread_mutex_unlock(&mlock);
