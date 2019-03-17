@@ -103,7 +103,11 @@ First *make* the project, then run the command from the command line using this 
 
 ### Implementation
 
-This was implemented by using semaphors for synchronization and having 4 procedures QuestionStart(), QuestionDone(), AnswerStart(), and AnswerDone(). Two seperate threads are created, the professor thread and student thread. Students will display that they are ready to ask a question, once the professor is ready to answer a question one student begins asking a question. No other student will ask a question until the professor finishes with an answer and that student has recieved the answer. This program is designed to keep students from asking questions at the same time using semaphors to signal whether the thread must wait for another student thread or the professor to complete until it is allowed to carry on.
+This was implemented by using semaphors for synchronization and having 4 procedures QuestionStart(), QuestionDone(), AnswerStart(), and AnswerDone(). Two seperate threads are created, the professor thread and student thread. 
+
+Students will display that they are ready to ask a question, once the professor is ready to answer a question one student begins asking a question. No other student will ask a question until the professor finishes with an answer and that student has recieved the answer. 
+
+This program is designed to keep students from asking questions at the same time using semaphors to signal whether the thread must wait for another student thread or the professor to complete until it is allowed to carry on.
 
 The number of students can be changed via the command line prompt and the student threads are created by the following for loop below while there is only one professor thread in this problem.
 
