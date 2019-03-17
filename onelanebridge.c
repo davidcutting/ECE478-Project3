@@ -72,7 +72,6 @@ void crossBridge()
 void exitBridge()
 {
     pthread_mutex_lock(&mlock);
-    //printf("exitBridge\n");
     currentNumber--;
     c++;
     if(car[c]==0){
