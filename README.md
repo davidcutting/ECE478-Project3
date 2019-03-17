@@ -61,6 +61,18 @@ First *make* the project, then run the command from the command line using this 
 
 `condvar1`
 
+### Sample outputs
+
+```bash
+car 11 dir 0 arrived at the bridge.
+car 12 dir 1 arrived at the bridge.
+car 13 dir 1 arrived at the bridge.
+car 12 dir 1 crossing the bridge. Current dir: 1 #cars: 1
+car 14 dir 0 arrived at the bridge.
+car 13 dir 1 crossing the bridge. Current dir: 1 #cars: 2
+car 10 dir 0 exits the bridge.
+```
+
 ## The professor and students problem
 
 ### How to run
