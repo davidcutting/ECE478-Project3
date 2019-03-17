@@ -8,7 +8,6 @@
 pthread_t t[NUMTHRDS];
 int car[NUMTHRDS];
 
-int coin_flip = 23;
 int j=-1;
 int a=-1;
 int i;
